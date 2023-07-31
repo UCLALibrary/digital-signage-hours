@@ -10,7 +10,7 @@ This code repo use frontend techniques to create an embedded html file for RiseV
 
 - To avoid repeated image loading, all pngs and svgs are also embedded into html (pngs are embedded as binary files)
 
-- While displaying the html file, you need to make sure RiseVision reload the page at a resonable rate (at least once a day for library hours). This could be done by looping through different presentations or by setting a refresh time.
+- While displaying the html file, you need to make sure RiseVision reload the page at a resonable rate (perferably static time no more than 24 hours and no less than 1 minute). This could be done by looping through different presentations or by setting a refresh time.
 
 ## File structure
 
