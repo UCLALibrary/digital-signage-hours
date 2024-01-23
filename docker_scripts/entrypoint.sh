@@ -21,8 +21,9 @@ if [ "$DJANGO_RUN_ENV" = "dev" ]; then
   python manage.py createsuperuser --no-input
 
   # Load fixtures, only in dev environment.
+  # TODO: Configure or delete
   echo "Loading sample data set..."
-  python ./manage.py loaddata sample_data
+  # python ./manage.py loaddata sample_data
 fi
 
 # Build static files directory, starting fresh each time
@@ -37,5 +38,5 @@ else
   # -b IPADDR:PORT binding
   # --access-logfile where to send HTTP access logs (- is stdout)
   export GUNICORN_CMD_ARGS="-w 3 -b 0.0.0.0:8000 --access-logfile -"
-  gunicorn proj.wsgi:application
+  gunicorn project.wsgi:application
 fi
