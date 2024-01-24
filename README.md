@@ -78,7 +78,7 @@ The container runs via `docker_scripts/entrypoint.sh`, which
 
    ```
    # Open psql client in the dev database container
-   $ docker-compose exec db psql -d link_shortener -U link_shortener
+   $ docker-compose exec db psql -d digital_signs -U digital_signs
    # Open a shell in the django container
    $ docker-compose exec django bash
    # Django-aware Python shell
