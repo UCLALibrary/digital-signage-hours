@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendar Widget</title>
+</head>
+<body>
+    <h2>{{ start }} - {{ end }}</h2>
+    <ul>
+        {% for item in weekdays %}
+            <li {% if item.date.date == today.date %}class="today"{% endif %}>
+                <span class="day">{{ item.date.strftime('%A') }}</span>
+                <span class="time">{{ item.rendered }}</span>
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
