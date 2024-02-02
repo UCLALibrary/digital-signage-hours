@@ -7,8 +7,6 @@ from signs.views_utils import (
     get_hours,
     get_start_end_dates,
     construct_display_url,
-    get_location_events,
-    parse_location_events,
 )
 from signs.forms import LocationForm, DisplayTypeForm
 
