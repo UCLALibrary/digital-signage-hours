@@ -6,42 +6,36 @@
 
 html {
   font-family: "Karbon", Arial, Helvetica, sans-serif;
-  font-size: 40px;
+  font-size: 35px;
   color: #ffffff;
-  width: 2160px;
-  height: 3840px;
-  background-image: url("/static/portrait_background_large.png");
-  background-size: 2160px 3840px;
+  width: 3840px;
+  height: 2160px;
   background-repeat: no-repeat;
+  background-image: url("/static/img/landscape_background.png");
 }
 
 main {
   display: flex;
   flex-direction: column;
-  padding: 200px 75px;
-}
-
-header div {
-  display: flex;
-  flex-direction: column;
-  align-items: start;
+  padding: 50px 100px;
 }
 
 h1 {
-  margin: 0;
-  padding: 0 0 0 1rem;
+  margin: 1;
+  padding: 0 0 0 100px;
   color: #ffd100;
-  font-size: 2.1rem;
+  font-size: 2.2rem;
   font-weight: 600;
 }
 
 h2 {
-  font-size: 2rem;
-  margin: 87.5px 0 62.5px 0.3rem;
   padding: 0;
+  margin: 40px 0 60px 0.3rem;
+  font-size: 1.8rem;
 }
 
 ul {
+  width: 43%;
   list-style: none;
   margin: 0;
   padding: 0;
@@ -50,8 +44,8 @@ ul {
 li {
   display: flex;
   align-items: center;
-  padding: 0.8rem 0.3rem;
-  font-size: 1.7rem;
+  padding: 0.5rem 0.3rem;
+  font-size: 1.4rem;
 }
 
 .time {
@@ -59,7 +53,7 @@ li {
 }
 
 svg {
-  height: 5rem;
+  height: 4rem;
 }
 
 header {
@@ -67,14 +61,21 @@ header {
   align-items: center;
 }
 
-img {
-  width: 7rem;
-  margin-left: 1.4rem;
-  margin-bottom: 0.5rem;
+.columns {
+  width: 45%;
+  display: flex;
+  justify-content: space-between;
+}
+
+hr {
+  height: auto;
+  width: 2.5px;
+  margin: 0;
+  background-color: #ffffff;
 }
 
 .today {
   background-color: #2774ae;
-  box-shadow: 0 0 10px 10px #8bb8e8;
+  box-shadow: 0 0 5px 5px #8bb8e8;
   color: #ffd100;
 }

@@ -1,6 +1,7 @@
 import requests
 import logging
 from datetime import datetime
+from bs4 import BeautifulSoup
 from signs.models import Location
 
 logger = logging.getLogger(__name__)
@@ -12,7 +13,6 @@ def get_hours(widget_url: str, location_id: str) -> list[dict]:
         widget_url, params={"lid": location_id, "weeks": 2, "format": "json"}
     )
     data = response.json()
-    logger.debug(f"data: {data}")
 
     # Data comes back as a dictionary with one key (related to location ID) and a value that is a dictionary
     # This dictionary has a key "weeks" with a value that is a list of dictionaries, one for each week
@@ -53,4 +53,4 @@ def get_start_end_dates(hours: list[dict]) -> tuple[str, str]:
 
 
 def construct_display_url(location_id: int, orientation: str) -> str:
-    return f"/display/{location_id}/{orientation}"
+    return f"/display_hours/{location_id}/{orientation}"

@@ -8,10 +8,10 @@ html {
   font-family: "Karbon", Arial, Helvetica, sans-serif;
   font-size: 40px;
   color: #ffffff;
-  width: 1080px;
-  height: 1920px;
-  background-image: url("/static/portrait_background_small.png");
-  background-size: 1080px 1920px;
+  width: 2160px;
+  height: 3840px;
+  background-image: url("/static/img/portrait_background_large.png");
+  background-size: 2160px 3840px;
   background-repeat: no-repeat;
 }
 
