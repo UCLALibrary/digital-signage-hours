@@ -1,0 +1,242 @@
+[
+{
+    "model": "signs.location",
+    "pk": 1,
+    "fields": {
+        "name": "Arts Library",
+        "location_id": 4690
+    }
+},
+{
+    "model": "signs.location",
+    "pk": 2,
+    "fields": {
+        "name": "Music Library",
+        "location_id": 4696
+    }
+},
+{
+    "model": "signs.location",
+    "pk": 3,
+    "fields": {
+        "name": "Arts Library Reference Desk",
+        "location_id": 20525
+    }
+},
+{
+    "model": "signs.location",
+    "pk": 4,
+    "fields": {
+        "name": "Biomedical Library",
+        "location_id": 2081
+    }
+},
+{
+    "model": "signs.location",
+    "pk": 5,
+    "fields": {
+        "name": "Graduate Reading Room - Restricted",
+        "location_id": 2082
+    }
+},
+{
+    "model": "signs.location",
+    "pk": 6,
+    "fields": {
+        "name": "Equipment Lending (Biomedical Library)",
+        "location_id": 3291
+    }
+},
+{
+    "model": "signs.location",
+    "pk": 7,
+    "fields": {
+        "name": "East Asian Library",
+        "location_id": 4693
+    }
+},
+{
+    "model": "signs.location",
+    "pk": 8,
+    "fields": {
+        "name": "Law Library",
+        "location_id": 4694
+    }
+},
+{
+    "model": "signs.location",
+    "pk": 9,
+    "fields": {
+        "name": "Law Library Reference Desk",
+        "location_id": 4695
+    }
+},
+{
+    "model": "signs.location",
+    "pk": 10,
+    "fields": {
+        "name": "Library Special Collections",
+        "location_id": 6133
+    }
+},
+{
+    "model": "signs.location",
+    "pk": 11,
+    "fields": {
+        "name": "Rosenfeld Management Library",
+        "location_id": 3280
+    }
+},
+{
+    "model": "signs.location",
+    "pk": 12,
+    "fields": {
+        "name": "Music Library Research Help Desk",
+        "location_id": 22392
+    }
+},
+{
+    "model": "signs.location",
+    "pk": 13,
+    "fields": {
+        "name": "Powell Library",
+        "location_id": 2572
+    }
+},
+{
+    "model": "signs.location",
+    "pk": 14,
+    "fields": {
+        "name": "Night Powell",
+        "location_id": 4699
+    }
+},
+{
+    "model": "signs.location",
+    "pk": 15,
+    "fields": {
+        "name": "CLICC Computer Lab",
+        "location_id": 2609
+    }
+},
+{
+    "model": "signs.location",
+    "pk": 16,
+    "fields": {
+        "name": "Powell Research Help Desk",
+        "location_id": 20241
+    }
+},
+{
+    "model": "signs.location",
+    "pk": 17,
+    "fields": {
+        "name": "CLICC Classrooms Hub",
+        "location_id": 2607
+    }
+},
+{
+    "model": "signs.location",
+    "pk": 18,
+    "fields": {
+        "name": "CLICC Equipment Lending (Powell)",
+        "location_id": 2608
+    }
+},
+{
+    "model": "signs.location",
+    "pk": 19,
+    "fields": {
+        "name": "Research Library (Charles E. Young)",
+        "location_id": 1916
+    }
+},
+{
+    "model": "signs.location",
+    "pk": 20,
+    "fields": {
+        "name": "CLICC Equipment Lending (Research Library)",
+        "location_id": 2614
+    }
+},
+{
+    "model": "signs.location",
+    "pk": 21,
+    "fields": {
+        "name": "Library Special Collections (Research Library)",
+        "location_id": 2083
+    }
+},
+{
+    "model": "signs.location",
+    "pk": 22,
+    "fields": {
+        "name": "Young Research Help Desk",
+        "location_id": 20242
+    }
+},
+{
+    "model": "signs.location",
+    "pk": 23,
+    "fields": {
+        "name": "SEL/Boelter",
+        "location_id": 4702
+    }
+},
+{
+    "model": "signs.location",
+    "pk": 24,
+    "fields": {
+        "name": "SEL/Geology",
+        "location_id": 4703
+    }
+},
+{
+    "model": "signs.location",
+    "pk": 25,
+    "fields": {
+        "name": "Equipment Lending (SEL/Boelter)",
+        "location_id": 4705
+    }
+},
+{
+    "model": "signs.location",
+    "pk": 26,
+    "fields": {
+        "name": "Equipment Lending (SEL/Geo)",
+        "location_id": 4706
+    }
+},
+{
+    "model": "signs.location",
+    "pk": 27,
+    "fields": {
+        "name": "ARSC",
+        "location_id": 19256
+    }
+},
+{
+    "model": "signs.location",
+    "pk": 28,
+    "fields": {
+        "name": "Data Science Center",
+        "location_id": 21770
+    }
+},
+{
+    "model": "signs.location",
+    "pk": 29,
+    "fields": {
+        "name": "IMCS",
+        "location_id": 22368
+    }
+},
+{
+    "model": "signs.location",
+    "pk": 30,
+    "fields": {
+        "name": "Media Lab",
+        "location_id": 22369
+    }
+}
+]
