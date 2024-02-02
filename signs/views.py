@@ -73,6 +73,19 @@ def display_hours(
     return render(request, "signs/display.html", context)
 
 
+def display_CLICC_events(request: HttpRequest) -> HttpResponse:
+    """Display events for CLICC locations. This view is used by the digital signage system."""
+    location_ids = [3363, 4357, 4358, 4799]
+    location_events = {}
+    for location_id in location_ids:
+        events = get_location_events(location_id)
+        parsed_events = parse_location_events(events)
+        location_events[location_id] = parsed_events
+    context = {"location_events": location_events}
+    logger.debug(context)
+    return render(request, "signs/display_events.html", context)
+
+
 @login_required
 def show_log(request: HttpRequest, line_count: int = 200) -> HttpResponse:
     """Display log."""
