@@ -5,9 +5,9 @@
 {% block content %}
     <form method="post">
         {% csrf_token %}
-        {{ location_form.as_p }}
-        {{ display_type_form.as_p }}
-        <button type="submit">Submit</button>
+        {% bootstrap_form location_form layout="horizontal" %}
+        {% bootstrap_form display_type_form layout="horizontal" %}
+        {% bootstrap_button button_type="submit" content="Get URL" %}
     </form>
     {% if url %}
         <p>Paste this URL into Rise Vision:</p>
