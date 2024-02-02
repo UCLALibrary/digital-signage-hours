@@ -9,6 +9,9 @@ urlpatterns = [
         views.display_hours,
         name="display_hours",
     ),
+    path(
+        "display_CLICC_events/", views.display_CLICC_events, name="display_CLICC_events"
+    ),
     path("logs/", views.show_log, name="show_log"),
     path("logs/<int:line_count>", views.show_log, name="show_log"),
     path("release_notes/", views.release_notes, name="release_notes"),
