@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from signs.models import Location
 from signs.views_utils import (
     get_hours,
+    format_hours,
     get_start_end_dates,
     construct_display_url,
 )
@@ -52,13 +53,14 @@ def display_hours(
 
     location_name = Location.objects.get(location_id=location_id).name
     hours = get_hours(widget_url, location_id)
-    start, end = get_start_end_dates(hours)
+    formatted_hours = format_hours(hours)
+    start, end = get_start_end_dates(formatted_hours)
     stylesheet = f"css/{orientation}.css"
 
     context = {
         "start": start,
         "end": end,
-        "hours": hours,
+        "hours": formatted_hours,
         "stylesheet": stylesheet,
         "location_name": location_name,
     }

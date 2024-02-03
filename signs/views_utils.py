@@ -8,15 +8,22 @@ logger = logging.getLogger(__name__)
 
 
 def get_hours(widget_url: str, location_id: str) -> list[dict]:
-    # We request 2 weeks of hours from the widget to cover Monday-Sunday instead of Sunday-Saturday
+    # We request 2 weeks of hours from the widget to cover Monday-Sunday
+    # instead of Sunday-Saturday
     response = requests.get(
         widget_url, params={"lid": location_id, "weeks": 2, "format": "json"}
     )
     data = response.json()
+    return data
 
-    # Data comes back as a dictionary with one key (related to location ID) and a value that is a dictionary
-    # This dictionary has a key "weeks" with a value that is a list of dictionaries, one for each week
-    # Each week dictionary has keys for each day of the week, with values that are dictionaries with data about the day
+
+def format_hours(data: dict) -> list[dict]:
+    # Data comes back from get_hours() as a dictionary with one key (related to location ID),
+    # and a value that is a dictionary
+    # This dictionary has a key "weeks" with a value that is a list of dictionaries,
+    # one for each week
+    # Each week dictionary has keys for each day of the week,
+    # with values that are dictionaries with data about the day
     weeks = list(data.values())[0]["weeks"]
     first_week = weeks[0]
     second_week = weeks[1]
