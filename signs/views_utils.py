@@ -1,13 +1,13 @@
 import requests
 import logging
 from datetime import datetime
-from bs4 import BeautifulSoup
-from signs.models import Location
+from django.http import HttpRequest
 
 logger = logging.getLogger(__name__)
 
 
 def get_hours(widget_url: str, location_id: str) -> list[dict]:
+    """Retrieve hours for a location from the LibCal widget."""
     # We request 2 weeks of hours from the widget to cover Monday-Sunday
     # instead of Sunday-Saturday
     response = requests.get(
@@ -18,23 +18,30 @@ def get_hours(widget_url: str, location_id: str) -> list[dict]:
 
 
 def format_hours(data: dict) -> list[dict]:
-    # Data comes back from get_hours() as a dictionary with one key (related to location ID),
-    # and a value that is a dictionary
-    # This dictionary has a key "weeks" with a value that is a list of dictionaries,
-    # one for each week
-    # Each week dictionary has keys for each day of the week,
-    # with values that are dictionaries with data about the day
+    """Reformat and remove unnecessary data from LibCal hours response."""
+    # Hours data is nested three dictionaries deep in LibCal's response
+    # Example (truncated) data from LibCal:
+    # {"loc_2609": {
+    #     ...
+    #     "weeks": [
+    #         {
+    #             "Sunday": {
+    #                 "date": "2024-02-04",
+    #                 "times": {
+    #                     "status": "open",
+    #                     "hours": [{"from": "10am", "to": "3pm"}],
+    #                     "currently_open": False,
+    #                 },
+    #                 "rendered": "10am - 3pm",
+    #             }, ...
+
     weeks = list(data.values())[0]["weeks"]
     first_week = weeks[0]
     second_week = weeks[1]
 
-    days = {}
-    days["Monday"] = first_week["Monday"]
-    days["Tuesday"] = first_week["Tuesday"]
-    days["Wednesday"] = first_week["Wednesday"]
-    days["Thursday"] = first_week["Thursday"]
-    days["Friday"] = first_week["Friday"]
-    days["Saturday"] = first_week["Saturday"]
+    # We want to display Monday-Sunday, so we use the first week's Monday-Saturday
+    # and the second week's Sunday
+    days = first_week
     days["Sunday"] = second_week["Sunday"]
 
     # Days dicts contain data we don't need, so reformat into a new list of dicts
@@ -49,6 +56,8 @@ def format_hours(data: dict) -> list[dict]:
 
 
 def get_start_end_dates(hours: list[dict]) -> tuple[str, str]:
+    """Given a formatted list of hours, return start and end dates in short
+    month-day format, e.g. ("Feb 05","Feb 11")."""
     # hours list is constructed in order, so we can just take the first and last items
     start = hours[0]["date"]
     start = datetime.strptime(start, "%Y-%m-%d")
@@ -59,5 +68,11 @@ def get_start_end_dates(hours: list[dict]) -> tuple[str, str]:
     return start, end
 
 
-def construct_display_url(location_id: int, orientation: str) -> str:
-    return f"/display_hours/{location_id}/{orientation}"
+def construct_display_url(
+    request: HttpRequest, location_id: int, orientation: str
+) -> str:
+    """Construct URL for display of hours given location ID and orientation."""
+
+    scheme = request.scheme
+    host = request.get_host()
+    return f"{scheme}://{host}/display_hours/{location_id}/{orientation}"

@@ -9,13 +9,10 @@ ORIENTATION_CHOICES = [
 ]
 
 
-# DisplayTypeForm and LocationForm used in get_URL view
-class DisplayTypeForm(forms.Form):
-    orientation = forms.ChoiceField(choices=ORIENTATION_CHOICES)
-
-
+# LocationForm used in get_hours_url view
 class LocationForm(forms.ModelForm):
     location = forms.ModelChoiceField(queryset=Location.objects.all())
+    orientation = forms.ChoiceField(choices=ORIENTATION_CHOICES)
 
     class Meta:
         model = Location

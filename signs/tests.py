@@ -1,8 +1,6 @@
 from django.test import TestCase
 from signs.models import Location
-from signs.views_utils import construct_display_url, get_hours, get_start_end_dates
-
-# Create your tests here.
+from signs.views_utils import construct_display_url, get_start_end_dates
 
 
 class LocationTestCase(TestCase):
@@ -20,14 +18,21 @@ class ConstructDisplayURLTestCase(TestCase):
 
     def test_construct_display_url(self):
         powell = Location.objects.get(location_id=1)
-        url = construct_display_url(powell.location_id, "portrait_small")
-        self.assertEqual(url, "/display/1/portrait_small")
+        response = self.client.get("get_hours_url/")
+        request = response.wsgi_request
+        url = construct_display_url(request, powell.location_id, "portrait_small")
+        # dummy request will have host of "testserver" and scheme of "http"
+        self.assertEqual(url, "http://testserver/display_hours/1/portrait_small")
 
 
 class GetStartEndDatesTestCase(TestCase):
     def test_get_start_end_dates(self):
         hours = [
-            {"date": "2024-01-29", "weekday": "Monday", "rendered_hours": "8am - 5pm"},
+            {
+                "date": "2024-01-29",
+                "weekday": "Monday",
+                "rendered_hours": "8am - 5pm",
+            },
             {
                 "date": "2024-01-30",
                 "weekday": "Tuesday",
@@ -43,13 +48,21 @@ class GetStartEndDatesTestCase(TestCase):
                 "weekday": "Thursday",
                 "rendered_hours": "8am - 5pm",
             },
-            {"date": "2024-02-02", "weekday": "Friday", "rendered_hours": "8am - 3pm"},
+            {
+                "date": "2024-02-02",
+                "weekday": "Friday",
+                "rendered_hours": "8am - 3pm",
+            },
             {
                 "date": "2024-02-03",
                 "weekday": "Saturday",
                 "rendered_hours": "Closed",
             },
-            {"date": "2024-02-04", "weekday": "Sunday", "rendered_hours": "Closed"},
+            {
+                "date": "2024-02-04",
+                "weekday": "Sunday",
+                "rendered_hours": "Closed",
+            },
         ]
         start, end = get_start_end_dates(hours)
         self.assertEqual(start, "Jan 29")
