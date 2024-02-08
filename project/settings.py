@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django_bootstrap5",
     "signs",
 ]
 
@@ -186,3 +187,6 @@ LOGGING = {
         },
     },
 }
+
+# LibCal widget URL
+LIBCAL_HOURS_WIDGET = os.getenv("LIBCAL_HOURS_WIDGET")

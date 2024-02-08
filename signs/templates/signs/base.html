@@ -1,0 +1,32 @@
+{% load static %}
+{% load django_bootstrap5 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>UCLA Library Digital Hours Signage</title>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/base_style.css' %}"/>
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="{% static 'favicon.ico' %}"/>
+</head>
+
+<body>
+    <ul class="navbar">
+        <li><a href="/get_hours_url/">Generate Hours URL</a></li>
+        <li><a href="/admin/">Admin (Configure Locations)</a></li>
+        <li><a href="/logs/">Logs</a></li>
+        <li><a href="/release_notes/">Release Notes</a></li>
+        <li><a href="/accounts/logout/">Logout</a></li>
+    </ul>
+    <br>
+    <div class="container">
+        {% block content %}
+        {% endblock %}
+    </div>
+
+</body>
+
+</html>

@@ -1,0 +1,43 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{% static stylesheet %}">
+    <title>Library Hours</title>
+</head>
+<body>
+    <main>
+        {% now "Y-m-d" as nowdate %}
+        <header>
+            <svg viewBox="0 0 81 80" fill="none" xmlns="https://www.w3.org/2000/svg">
+                <path d="M8.934 79.601 24.819 41.251M24.817 79.601 40.702 41.251M40.702 79.601 56.587 41.251M56.585 79.601 72.471 41.251" stroke="#0AA5FF" stroke-width="1.5"></path>
+                <path d="M24.819 39.35 8.934 1M40.702 39.35 24.817 1M56.587 39.35 40.702 1M72.471 39.35 56.585 1" stroke="#00E0E0" stroke-width="1.5" class="svg__stroke--wayfinder"></path>
+              </svg>
+            <div>
+                <h1>{{ location_name }}</h1>
+            </div>
+        </header>
+        {% if error %}
+                <h2 class="error">{{ error }}</h2>
+        {% endif %}
+        <h2>{{ start }} - {{ end }}</h2>
+        <div class="columns">
+            <ul>
+                {% for day in hours %}
+                    <li {% if day.date == nowdate %}class="today"{% endif %}>
+                        <span class="day">{{ day.weekday }}</span>
+                        <span class="time">{{ day.rendered_hours }}</span>
+                    </li>
+                    {% if forloop.counter == 4 and stylesheet == "css/landscape.css" %}
+            </ul>
+            <hr>
+            <ul>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        </div>
+    </main>
+</body>
+</html>

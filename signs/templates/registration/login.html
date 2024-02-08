@@ -1,0 +1,14 @@
+{% extends 'signs/base.html' %}
+{% load django_bootstrap5 %}
+{% block content %}
+
+<h3>Log In</h2>
+<br/>
+
+<form method="post">
+    {% csrf_token %}
+    {% bootstrap_form form layout="horizontal" %}
+    {% bootstrap_button button_type="submit" content="Log In" %}
+</form>
+
+{% endblock %}

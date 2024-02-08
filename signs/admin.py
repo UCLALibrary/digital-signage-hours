@@ -1,3 +1,5 @@
 from django.contrib import admin
+from signs.models import Location
+from signs.forms import LocationForm
 
-# Register your models here.
+admin.site.register(Location)

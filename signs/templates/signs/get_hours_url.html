@@ -1,0 +1,15 @@
+{% extends 'signs/base.html' %}
+
+{% load django_bootstrap5 %}
+
+{% block content %}
+    <form method="post">
+        {% csrf_token %}
+        {% bootstrap_form location_form layout="horizontal" %}
+        {% bootstrap_button button_type="submit" content="Get URL" %}
+    </form>
+    {% if url %}
+        <p>Paste this URL into Rise Vision:</p>
+        <p>{{ url|urlize }}</p>
+    {% endif %}
+{% endblock %}
