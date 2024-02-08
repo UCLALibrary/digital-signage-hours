@@ -121,7 +121,7 @@ class FormatHoursTestCase(TestCase):
     def test_format_hours_missing_days(self):
         with open("signs/fixtures/libcal_hours_response_missing_days.json") as f:
             data = json.load(f)
-        # Test is missing Fri-Sun of 2nd week, so should return empty list
+        # Test is missing Fri-Sat of 2nd week, so should return empty list
         hours = format_hours(data)
         self.assertEqual(hours, [])
 

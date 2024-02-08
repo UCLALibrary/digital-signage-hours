@@ -6,7 +6,7 @@ from django.http import HttpRequest
 logger = logging.getLogger(__name__)
 
 
-def get_hours(widget_url: str, location_id: str) -> list[dict]:
+def get_hours(widget_url: str, location_id: str) -> dict:
     """Retrieve hours for a location from the LibCal widget."""
     # We request 2 weeks of hours from the widget to cover Monday-Sunday
     # instead of Sunday-Saturday
@@ -14,10 +14,21 @@ def get_hours(widget_url: str, location_id: str) -> list[dict]:
         widget_url, params={"lid": location_id, "weeks": 2, "format": "json"}
     )
     data = response.json()
+
+    # We might have extra locations in the response, so check for the one we want
+    location_key = f"loc_{location_id}"
+    if location_key not in data:
+        logger.error(
+            f"Location {location_id} not found in LibCal hours response: {data}"
+        )
+        return {}
+    else:
+        data = {location_key: data[location_key]}
+
     return data
 
 
-def format_hours(data: dict, location_id: str) -> list[dict]:
+def format_hours(data: dict) -> list[dict]:
     """Reformat and remove unnecessary data from LibCal hours response."""
     # Hours data is nested three dictionaries deep in LibCal's response
     # Example (truncated) data from LibCal:
@@ -35,33 +46,27 @@ def format_hours(data: dict, location_id: str) -> list[dict]:
     #                 "rendered": "10am - 3pm",
     #             }, ...
 
-    # We might have extra locations in the response, so check for the one we want
-    location_key = f"loc_{location_id}"
-    if location_key not in data:
-        logger.error(
-            f"Location {location_id} not found in LibCal hours response: {data}"
-        )
-        return []
-    else:
-        data = {location_key: data[location_key]}
-
-    # Check that the data contains the expected number of values:
-    # 2 weeks, 7 days each
-    if len(data) != 1:
-        logger.error(f"Unexpected number of locations in LibCal hours response: {data}")
-        return []
-    if len(list(data.values())[0]["weeks"]) != 2:
-        logger.error(f"Unexpected number of weeks in LibCal hours response: {data}")
-        return []
-    if (len(list(data.values())[0]["weeks"][0]) != 7) or (
-        len(list(data.values())[0]["weeks"][1]) != 7
-    ):
-        logger.error(f"Unexpected number of days in LibCal hours response: {data}")
+    # Check if the data is empty,
+    # since get_hours will return an empty dict if there's an error
+    if not data:
+        logger.error("No LibCal hours data available for formatting.")
         return []
 
     weeks = list(data.values())[0]["weeks"]
     first_week = weeks[0]
     second_week = weeks[1]
+
+    # Check that the data contains the expected number of values:
+    # 1 location, 2 weeks, 7 days each
+    if len(data) != 1:
+        logger.error(f"Unexpected number of locations in LibCal hours response: {data}")
+        return []
+    if len(weeks) != 2:
+        logger.error(f"Unexpected number of weeks in LibCal hours response: {data}")
+        return []
+    if (len(first_week) != 7) or (len(second_week) != 7):
+        logger.error(f"Unexpected number of days in LibCal hours response: {data}")
+        return []
 
     # We want to display Monday-Sunday, so we use the first week's Monday-Saturday
     # and the second week's Sunday
@@ -86,7 +91,6 @@ def get_start_end_dates(hours: list[dict]) -> tuple[str, str]:
     """Given a formatted list of hours, return start and end dates in short
     month-day format, e.g. ("Feb 05","Feb 11")."""
     # Hours list is already sorted by date, so we can just take the first and last items
-    # hours list is constructed in order, so we can just take the first and last items
     start = hours[0]["date"]
     formatted_start = format_date(start)
     end = hours[-1]["date"]
