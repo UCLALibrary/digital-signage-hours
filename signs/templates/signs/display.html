@@ -19,6 +19,9 @@
                 <h1>{{ location_name }}</h1>
             </div>
         </header>
+        {% if error %}
+                <h2 class="error">{{ error }}</h2>
+        {% endif %}
         <h2>{{ start }} - {{ end }}</h2>
         <div class="columns">
             <ul>

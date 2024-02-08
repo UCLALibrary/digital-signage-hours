@@ -10,7 +10,7 @@ from signs.views_utils import (
     get_start_end_dates,
     construct_display_url,
 )
-from signs.forms import LocationForm  # , DisplayTypeForm
+from signs.forms import LocationForm
 
 logger = logging.getLogger(__name__)
 
@@ -44,10 +44,20 @@ def display_hours(
     widget_url = settings.LIBCAL_HOURS_WIDGET
 
     location_name = Location.objects.get(location_id=location_id).name
+    stylesheet = f"css/{orientation}.css"
+
     hours = get_hours(widget_url, location_id)
     formatted_hours = format_hours(hours)
+    if not formatted_hours:
+        # formatted_hours will be an empty list if there was an error
+        context = {
+            "location_name": location_name,
+            "stylesheet": stylesheet,
+            "error": "There was an error retrieving hours for this location.",
+        }
+        return render(request, "signs/display.html", context)
+
     start, end = get_start_end_dates(formatted_hours)
-    stylesheet = f"css/{orientation}.css"
 
     context = {
         "start": start,

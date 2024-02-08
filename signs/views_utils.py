@@ -35,6 +35,20 @@ def format_hours(data: dict) -> list[dict]:
     #                 "rendered": "10am - 3pm",
     #             }, ...
 
+    # First, check that the data contains the expected number of values:
+    #  1 location, 2 weeks, 7 days each
+    if len(data) != 1:
+        logger.error(f"Unexpected number of locations in LibCal hours response: {data}")
+        return []
+    if len(list(data.values())[0]["weeks"]) != 2:
+        logger.error(f"Unexpected number of weeks in LibCal hours response: {data}")
+        return []
+    if (len(list(data.values())[0]["weeks"][0]) != 7) or (
+        len(list(data.values())[0]["weeks"][1]) != 7
+    ):
+        logger.error(f"Unexpected number of days in LibCal hours response: {data}")
+        return []
+
     weeks = list(data.values())[0]["weeks"]
     first_week = weeks[0]
     second_week = weeks[1]
@@ -52,20 +66,29 @@ def format_hours(data: dict) -> list[dict]:
         item["weekday"] = day
         item["rendered_hours"] = days[day]["rendered"]
         hours.append(item)
+
+    # Sort the final hours list by date
+    hours = sorted(hours, key=lambda x: x["date"])
     return hours
 
 
 def get_start_end_dates(hours: list[dict]) -> tuple[str, str]:
     """Given a formatted list of hours, return start and end dates in short
     month-day format, e.g. ("Feb 05","Feb 11")."""
+    # Hours list is already sorted by date, so we can just take the first and last items
     # hours list is constructed in order, so we can just take the first and last items
     start = hours[0]["date"]
-    start = datetime.strptime(start, "%Y-%m-%d")
-    start = start.strftime("%b %d")
+    formatted_start = format_date(start)
     end = hours[-1]["date"]
-    end = datetime.strptime(end, "%Y-%m-%d")
-    end = end.strftime("%b %d")
-    return start, end
+    formatted_end = format_date(end)
+    return formatted_start, formatted_end
+
+
+def format_date(date: str) -> str:
+    """Format date for display on digital sign. Converts 2024-02-04 to Feb 04."""
+
+    date = datetime.strptime(date, "%Y-%m-%d")
+    return date.strftime("%b %d")
 
 
 def construct_display_url(
