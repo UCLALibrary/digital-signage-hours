@@ -17,7 +17,7 @@ def get_hours(widget_url: str, location_id: str) -> list[dict]:
     return data
 
 
-def format_hours(data: dict) -> list[dict]:
+def format_hours(data: dict, location_id: str) -> list[dict]:
     """Reformat and remove unnecessary data from LibCal hours response."""
     # Hours data is nested three dictionaries deep in LibCal's response
     # Example (truncated) data from LibCal:
@@ -35,8 +35,18 @@ def format_hours(data: dict) -> list[dict]:
     #                 "rendered": "10am - 3pm",
     #             }, ...
 
-    # First, check that the data contains the expected number of values:
-    #  1 location, 2 weeks, 7 days each
+    # We might have extra locations in the response, so check for the one we want
+    location_key = f"loc_{location_id}"
+    if location_key not in data:
+        logger.error(
+            f"Location {location_id} not found in LibCal hours response: {data}"
+        )
+        return []
+    else:
+        data = {location_key: data[location_key]}
+
+    # Check that the data contains the expected number of values:
+    # 2 weeks, 7 days each
     if len(data) != 1:
         logger.error(f"Unexpected number of locations in LibCal hours response: {data}")
         return []

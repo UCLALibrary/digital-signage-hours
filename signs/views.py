@@ -47,7 +47,7 @@ def display_hours(
     stylesheet = f"css/{orientation}.css"
 
     hours = get_hours(widget_url, location_id)
-    formatted_hours = format_hours(hours)
+    formatted_hours = format_hours(hours, location_id)
     if not formatted_hours:
         # formatted_hours will be an empty list if there was an error
         context = {
