@@ -7,16 +7,23 @@ logger = logging.getLogger(__name__)
 
 
 def get_hours(widget_url: str, location_id: str) -> dict:
-    """Retrieve hours for a location from the LibCal widget."""
+    """Retrieve hours for a location from the LibCal widget.
+    Results for parent locations will include hours for all child locations."""
     # We request 2 weeks of hours from the widget to cover Monday-Sunday
     # instead of Sunday-Saturday
     response = requests.get(
         widget_url, params={"lid": location_id, "weeks": 2, "format": "json"}
     )
     data = response.json()
+    return data
+
+
+def get_single_location_hours(data: dict, location_id: str) -> dict:
+    """Given a LibCal hours response, return hours for a single location."""
 
     # We might have extra locations in the response, so check for the one we want
     location_key = f"loc_{location_id}"
+
     if location_key not in data:
         logger.error(
             f"Location {location_id} not found in LibCal hours response: {data}"
@@ -53,8 +60,6 @@ def format_hours(data: dict) -> list[dict]:
         return []
 
     weeks = list(data.values())[0]["weeks"]
-    first_week = weeks[0]
-    second_week = weeks[1]
 
     # Check that the data contains the expected number of values:
     # 1 location, 2 weeks, 7 days each
@@ -64,6 +69,9 @@ def format_hours(data: dict) -> list[dict]:
     if len(weeks) != 2:
         logger.error(f"Unexpected number of weeks in LibCal hours response: {data}")
         return []
+
+    first_week = weeks[0]
+    second_week = weeks[1]
     if (len(first_week) != 7) or (len(second_week) != 7):
         logger.error(f"Unexpected number of days in LibCal hours response: {data}")
         return []
