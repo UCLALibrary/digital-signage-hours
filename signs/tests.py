@@ -3,6 +3,7 @@ from signs.models import Location
 from signs.views_utils import (
     construct_display_url,
     get_start_end_dates,
+    get_single_location_hours,
     format_hours,
     format_date,
 )
@@ -154,3 +155,42 @@ class FormatHoursTestCase(TestCase):
         self.assertEqual(hours[6]["date"], "2024-02-11")
         self.assertEqual(hours[6]["weekday"], "Sunday")
         self.assertEqual(hours[6]["rendered_hours"], "Closed")
+
+
+class GetSingleLocationHoursTestCase(TestCase):
+    def test_get_single_location_hours(self):
+        with open("signs/fixtures/libcal_hours_response_two_weeks.json") as f:
+            data = json.load(f)
+        # standard single-location response for location
+        # "Arts Library Reference Desk", ID 20525
+        single_location_hours = get_single_location_hours(data, "20525")
+
+        # we should have single location in the response
+        self.assertEqual(len(single_location_hours), 1)
+        self.assertEqual(
+            single_location_hours["loc_20525"]["name"], "Arts Library Reference Desk"
+        )
+        # we expect two weeks of hours (2 dictionaries in the "weeks" list)
+        self.assertEqual(len(single_location_hours["loc_20525"]["weeks"]), 2)
+
+    def test_get_multiple_location_hours(self):
+        with open("signs/fixtures/libcal_hours_response_multiple_locations.json") as f:
+            data = json.load(f)
+        # data contains two locations, 20525 and 4690
+        # try to get hours for location 20525
+        single_location_hours = get_single_location_hours(data, "20525")
+        # should have single location in the response
+        # we should have single location in the response
+        self.assertEqual(len(single_location_hours), 1)
+        self.assertEqual(
+            single_location_hours["loc_20525"]["name"], "Arts Library Reference Desk"
+        )
+        # we expect two weeks of hours (2 dictionaries in the "weeks" list)
+        self.assertEqual(len(single_location_hours["loc_20525"]["weeks"]), 2)
+
+    def test_get_missing_location_hours(self):
+        with open("signs/fixtures/libcal_hours_response_two_weeks.json") as f:
+            data = json.load(f)
+        # this ID is not in the response, so should return an empty dict
+        single_location_hours = get_single_location_hours(data, "11111111")
+        self.assertEqual(single_location_hours, {})

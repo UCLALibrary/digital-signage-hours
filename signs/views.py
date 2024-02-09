@@ -5,8 +5,9 @@ from django.contrib.auth.decorators import login_required
 from django.conf import settings
 from signs.models import Location
 from signs.views_utils import (
-    get_hours,
     format_hours,
+    get_hours,
+    get_single_location_hours,
     get_start_end_dates,
     construct_display_url,
 )
@@ -47,7 +48,8 @@ def display_hours(
     stylesheet = f"css/{orientation}.css"
 
     hours = get_hours(widget_url, location_id)
-    formatted_hours = format_hours(hours)
+    single_location_hours = get_single_location_hours(hours, location_id)
+    formatted_hours = format_hours(single_location_hours)
     if not formatted_hours:
         # formatted_hours will be an empty list if there was an error
         context = {
