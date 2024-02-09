@@ -125,6 +125,20 @@ class FormatHoursTestCase(TestCase):
         hours = format_hours(data)
         self.assertEqual(hours, [])
 
+    def test_format_hours_missing_week(self):
+        with open("signs/fixtures/libcal_hours_response_one_week.json") as f:
+            data = json.load(f)
+        # Test is missing 2nd week, so should return empty list
+        hours = format_hours(data)
+        self.assertEqual(hours, [])
+
+    def test_format_hours_multiple_locations(self):
+        with open("signs/fixtures/libcal_hours_response_multiple_locations.json") as f:
+            data = json.load(f)
+        # Test has multiple locations, so should return empty list
+        hours = format_hours(data)
+        self.assertEqual(hours, [])
+
     def test_format_hours_wrong_order(self):
         with open("signs/fixtures/libcal_hours_response_wrong_order.json") as f:
             data = json.load(f)
