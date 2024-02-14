@@ -1,7 +1,8 @@
 import requests
 import logging
 from datetime import datetime
-from django.http import HttpRequest
+from bs4 import BeautifulSoup
+from django.http import HttpRequest, HttpResponse
 
 logger = logging.getLogger(__name__)
 
@@ -123,17 +124,24 @@ def construct_display_url(
     return f"{scheme}://{host}/display_hours/{location_id}/{orientation}"
 
 
-def get_location_events(location_id: int) -> list[dict]:
+def get_location_events(widget_url: str, location_id: int) -> HttpResponse:
+    """Get events for a location from the LibCal widget."""
     widget_url = (
         "https://calendar.library.ucla.edu/api_events.php?m=today&simple=ul_date&cid="
     )
     events = []
     widget_url += f"{location_id}"
     response = requests.get(widget_url)
-    if "No events are scheduled." in response.text:
-        return events
+    return response
+
+
+def parse_location_events(location_id: int, response: HttpResponse) -> list[dict]:
+    """Parse the HTML response from the LibCal widget using BeautifulSoup.
+    Return a list of events, each as a dictionary with title, times, and location_id."""
+    if b"No events are scheduled." in response.content:
+        return []
     else:
-        soup = BeautifulSoup(response.text, "html.parser")
+        soup = BeautifulSoup(response.content, "html.parser")
         events = []
         for li in soup.find_all("li"):
             # events are in the form of <li><a>Event Title</a><span>Event Times</span></li>
@@ -146,11 +154,11 @@ def get_location_events(location_id: int) -> list[dict]:
                     "location_id": location_id,
                 }
             )
-
     return events
 
 
-def parse_location_events(events: list[dict]) -> list[dict]:
+def format_events(events: list[dict]) -> list[dict]:
+    """Format events for display on the digital sign."""
     parsed_events = []
     for event in events:
         # events are in the form of "8:00am - 12:00pm Friday, February 2, 2024"
@@ -178,11 +186,19 @@ def parse_location_events(events: list[dict]) -> list[dict]:
 
 
 def get_css_grid_row(time: datetime) -> str:
+    """Given a time, return the grid row that corresponds to the time."""
     # time is a datetime object with only the time set
     # return the grid row that corresponds to the time
-    # 8am is row 1, 8:30am is row 2, etc
+    # 8am is row 2, 8:30am is row 3, 9am is row 4, etc.
     hour = time.hour
     minute = time.minute
+    # round down to the nearest half hour, for simplicity and consistency
+    if minute < 30:
+        minute = 0
+    else:
+        minute = 30
+    # if time is on the half hour, add 0.5 to the hour so it will
+    # be one row lower
     if minute == 30:
         hour += 0.5
-    return str((hour - 8) * 2 + 1)
+    return str(int((hour - 8) * 2 + 2))

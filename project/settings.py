@@ -188,5 +188,6 @@ LOGGING = {
     },
 }
 
-# LibCal widget URL
+# LibCal widget URLs
 LIBCAL_HOURS_WIDGET = os.getenv("LIBCAL_HOURS_WIDGET")
+LIBCAL_EVENTS_WIDGET = os.getenv("LIBCAL_EVENTS_WIDGET")

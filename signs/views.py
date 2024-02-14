@@ -12,6 +12,7 @@ from signs.views_utils import (
     construct_display_url,
     get_location_events,
     parse_location_events,
+    format_events,
 )
 from signs.forms import LocationForm
 
@@ -44,7 +45,7 @@ def display_hours(
 ) -> HttpResponse:
     """Display hours for a location. This view is used by the digital signage system."""
 
-    widget_url = settings.LIBCAL_HOURS_WIDGET
+    hours_widget_url = settings.LIBCAL_HOURS_WIDGET
 
     location_name = Location.objects.get(location_id=location_id).name
     stylesheet = f"css/{orientation}.css"
@@ -74,15 +75,19 @@ def display_hours(
 
 
 def display_CLICC_events(request: HttpRequest) -> HttpResponse:
-    """Display events for CLICC locations. This view is used by the digital signage system."""
-    location_ids = [3363, 4357, 4358, 4799]
+    """Display events for CLICC classroom locations.
+    This view is used by the digital signage system."""
+
+    events_widget_url = settings.LIBCAL_EVENTS_WIDGET
+    location_ids = [3363, 4357, 4358, 4799]  # CLICC classroom location IDs
     location_events = {}
+
     for location_id in location_ids:
-        events = get_location_events(location_id)
-        parsed_events = parse_location_events(events)
-        location_events[location_id] = parsed_events
+        events = get_location_events(events_widget_url, location_id)
+        parsed_events = parse_location_events(location_id, events)
+        formatted_events = format_events(parsed_events)
+        location_events[location_id] = formatted_events
     context = {"location_events": location_events}
-    logger.debug(context)
     return render(request, "signs/display_events.html", context)
 
 
