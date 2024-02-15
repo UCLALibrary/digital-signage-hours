@@ -135,25 +135,19 @@ def get_location_events(widget_url: str, location_id: int) -> HttpResponse:
     return response
 
 
-def parse_location_events(location_id: int, response: HttpResponse) -> list[dict]:
+def parse_events(response: HttpResponse) -> list[dict]:
     """Parse the HTML response from the LibCal widget using BeautifulSoup.
-    Return a list of events, each as a dictionary with title, times, and location_id."""
+    Return a list of events, each as a dictionary with title and times."""
     if b"No events are scheduled." in response.content:
         return []
     else:
         soup = BeautifulSoup(response.content, "html.parser")
         events = []
         for li in soup.find_all("li"):
-            # events are in the form of <li><a>Event Title</a><span>Event Times</span></li>
+            # events are in the form <li><a>Event Title</a><span>Event Times</span></li>
             a_content = li.find("a").text if li.find("a") else ""
             span_content = li.find("span").text if li.find("span") else ""
-            events.append(
-                {
-                    "title": a_content,
-                    "times": span_content,
-                    "location_id": location_id,
-                }
-            )
+            events.append({"title": a_content, "times": span_content})
     return events
 
 

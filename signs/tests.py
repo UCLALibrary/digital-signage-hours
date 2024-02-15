@@ -7,7 +7,7 @@ from signs.views_utils import (
     get_single_location_hours,
     format_hours,
     format_date,
-    parse_location_events,
+    parse_events,
     format_events,
     get_css_grid_row,
 )
@@ -202,23 +202,26 @@ class GetSingleLocationHoursTestCase(TestCase):
 
 
 class ParseLocationEventsTestCase(TestCase):
-    def test_parse_location_events(self):
+    def test_parse_events(self):
         with open("signs/fixtures/libcal_events_response_3363.txt") as f:
             html_response = f.read()
         data = HttpResponse(html_response)
         location_id = 3363
-        parsed_events = parse_location_events(location_id, data)
+        parsed_events = parse_events(data)
         self.assertEqual(len(parsed_events), 4)
-        # check that the parsed events are for the correct location
-        for event in parsed_events:
-            self.assertEqual(event["location_id"], location_id)
+        # check that we got the expected event data
+        # use the second event, since the first has no title
+        self.assertEqual(parsed_events[1]["title"], "Philosophy 31")
+        self.assertEqual(
+            parsed_events[1]["times"], "9:30am - 11:30am Wednesday, February 14, 2024"
+        )
 
-    def test_parse_location_events_no_event(self):
+    def test_parse_events_no_event(self):
         with open("signs/fixtures/libcal_events_response_10430.txt") as f:
             html_response = f.read()
         data = HttpResponse(html_response)
         location_id = 10430
-        parsed_events = parse_location_events(location_id, data)
+        parsed_events = parse_events(data)
         # no events for this location, so should return an empty list
         self.assertEqual(parsed_events, [])
 
@@ -229,7 +232,7 @@ class FormatEventsTestCase(TestCase):
             html_response = f.read()
         data = HttpResponse(html_response)
         location_id = 3363
-        parsed_events = parse_location_events(location_id, data)
+        parsed_events = parse_events(data)
         formatted_events = format_events(parsed_events)
         # should have 3 events after formatting
         self.assertEqual(len(formatted_events), 3)
@@ -243,7 +246,7 @@ class FormatEventsTestCase(TestCase):
             html_response = f.read()
         data = HttpResponse(html_response)
         location_id = 10430
-        parsed_events = parse_location_events(location_id, data)
+        parsed_events = parse_events(data)
         formatted_events = format_events(parsed_events)
         # no events for this location, so should return an empty list
         self.assertEqual(formatted_events, [])

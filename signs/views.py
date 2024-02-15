@@ -11,7 +11,7 @@ from signs.views_utils import (
     get_start_end_dates,
     construct_display_url,
     get_location_events,
-    parse_location_events,
+    parse_events,
     format_events,
 )
 from signs.forms import LocationForm
@@ -84,7 +84,7 @@ def display_CLICC_events(request: HttpRequest) -> HttpResponse:
 
     for location_id in location_ids:
         events = get_location_events(events_widget_url, location_id)
-        parsed_events = parse_location_events(location_id, events)
+        parsed_events = parse_events(events)
         formatted_events = format_events(parsed_events)
         location_events[location_id] = formatted_events
     context = {"location_events": location_events}
