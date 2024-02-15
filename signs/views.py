@@ -50,7 +50,7 @@ def display_hours(
     location_name = Location.objects.get(location_id=location_id).name
     stylesheet = f"css/{orientation}.css"
 
-    hours = get_hours(widget_url, location_id)
+    hours = get_hours(hours_widget_url, location_id)
     single_location_hours = get_single_location_hours(hours, location_id)
     formatted_hours = format_hours(single_location_hours)
     if not formatted_hours:
@@ -74,7 +74,7 @@ def display_hours(
     return render(request, "signs/display.html", context)
 
 
-def display_CLICC_events(request: HttpRequest) -> HttpResponse:
+def display_clicc_events(request: HttpRequest) -> HttpResponse:
     """Display events for CLICC classroom locations.
     This view is used by the digital signage system."""
 

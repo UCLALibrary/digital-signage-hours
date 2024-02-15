@@ -106,6 +106,10 @@ hr {
   overflow: hidden;
 }
 
+.event p {
+  margin: 10px auto;
+}
+
 .msg {
   margin: 0;
   padding: 0;

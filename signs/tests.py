@@ -203,10 +203,9 @@ class GetSingleLocationHoursTestCase(TestCase):
 
 class ParseLocationEventsTestCase(TestCase):
     def test_parse_events(self):
-        with open("signs/fixtures/libcal_events_response_3363.txt") as f:
+        with open("signs/fixtures/libcal_events_response_3363.html") as f:
             html_response = f.read()
         data = HttpResponse(html_response)
-        location_id = 3363
         parsed_events = parse_events(data)
         self.assertEqual(len(parsed_events), 4)
         # check that we got the expected event data
@@ -217,10 +216,9 @@ class ParseLocationEventsTestCase(TestCase):
         )
 
     def test_parse_events_no_event(self):
-        with open("signs/fixtures/libcal_events_response_10430.txt") as f:
+        with open("signs/fixtures/libcal_events_response_10430.html") as f:
             html_response = f.read()
         data = HttpResponse(html_response)
-        location_id = 10430
         parsed_events = parse_events(data)
         # no events for this location, so should return an empty list
         self.assertEqual(parsed_events, [])
@@ -228,10 +226,9 @@ class ParseLocationEventsTestCase(TestCase):
 
 class FormatEventsTestCase(TestCase):
     def test_format_events(self):
-        with open("signs/fixtures/libcal_events_response_3363.txt") as f:
+        with open("signs/fixtures/libcal_events_response_3363.html") as f:
             html_response = f.read()
         data = HttpResponse(html_response)
-        location_id = 3363
         parsed_events = parse_events(data)
         formatted_events = format_events(parsed_events)
         # should have 3 events after formatting
@@ -242,10 +239,9 @@ class FormatEventsTestCase(TestCase):
         self.assertEqual(formatted_events[0]["end_time"], datetime.time(11, 30))
 
     def test_format_events_no_event(self):
-        with open("signs/fixtures/libcal_events_response_10430.txt") as f:
+        with open("signs/fixtures/libcal_events_response_10430.html") as f:
             html_response = f.read()
         data = HttpResponse(html_response)
-        location_id = 10430
         parsed_events = parse_events(data)
         formatted_events = format_events(parsed_events)
         # no events for this location, so should return an empty list

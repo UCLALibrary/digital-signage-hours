@@ -126,10 +126,7 @@ def construct_display_url(
 
 def get_location_events(widget_url: str, location_id: int) -> HttpResponse:
     """Get events for a location from the LibCal widget."""
-    widget_url = (
-        "https://calendar.library.ucla.edu/api_events.php?m=today&simple=ul_date&cid="
-    )
-    events = []
+
     widget_url += f"{location_id}"
     response = requests.get(widget_url)
     return response
@@ -156,14 +153,19 @@ def format_events(events: list[dict]) -> list[dict]:
     parsed_events = []
     for event in events:
         # events are in the form of "8:00am - 12:00pm Friday, February 2, 2024"
+        # we only want the times
         start, end = event["times"].split(" - ")
         end = end.split(" ")[0]
 
-        start_time = datetime.strptime(start, "%I:%M%p").time()
-        end_time = datetime.strptime(end, "%I:%M%p").time()
+        # we now have times in the form of "8:00am"
+        # convert to datetime.time
+        strptime_format = "%I:%M%p"
+        start_time = datetime.strptime(start, strptime_format).time()
+        end_time = datetime.strptime(end, strptime_format).time()
+
         # only display events starting and ending between 8am and 8pm
-        if (start_time >= datetime.strptime("8:00am", "%I:%M%p").time()) and (
-            end_time <= datetime.strptime("8:00pm", "%I:%M%p").time()
+        if (start_time >= datetime.strptime("8:00am", strptime_format).time()) and (
+            end_time <= datetime.strptime("8:00pm", strptime_format).time()
         ):
             start_css_row = get_css_grid_row(start_time)
             end_css_row = get_css_grid_row(end_time)
@@ -186,13 +188,10 @@ def get_css_grid_row(time: datetime) -> str:
     # 8am is row 2, 8:30am is row 3, 9am is row 4, etc.
     hour = time.hour
     minute = time.minute
-    # round down to the nearest half hour, for simplicity and consistency
-    if minute < 30:
-        minute = 0
-    else:
-        minute = 30
-    # if time is on the half hour, add 0.5 to the hour so it will
-    # be one row lower
-    if minute == 30:
+
+    # events starting on the half hour or later should be on the next row
+    # so add 0.5 to the hour (since we multiply by 2 in getting the row number)
+    if minute >= 30:
         hour += 0.5
+
     return str(int((hour - 8) * 2 + 2))
