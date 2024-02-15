@@ -79,14 +79,18 @@ def display_clicc_events(request: HttpRequest) -> HttpResponse:
     This view is used by the digital signage system."""
 
     events_widget_url = settings.LIBCAL_EVENTS_WIDGET
-    location_ids = [3363, 4357, 4358, 4799]  # CLICC classroom location IDs
+    # location IDs for CLICC classrooms, with corresponding names used as CSS classes
+    locations = [(3363, "classA"), (4357, "classB"), (4358, "classC"), (4799, "inq3")]
     location_events = {}
 
-    for location_id in location_ids:
+    for location in locations:
+        location_id = location[0]
         events = get_location_events(events_widget_url, location_id)
         parsed_events = parse_events(events)
         formatted_events = format_events(parsed_events)
         location_events[location_id] = formatted_events
+        for event in formatted_events:
+            event["css_class"] = location[1]
     context = {"location_events": location_events}
     return render(request, "signs/display_events.html", context)
 
