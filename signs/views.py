@@ -10,6 +10,9 @@ from signs.views_utils import (
     get_single_location_hours,
     get_start_end_dates,
     construct_display_url,
+    get_location_events,
+    parse_events,
+    format_events,
 )
 from signs.forms import LocationForm
 
@@ -42,12 +45,12 @@ def display_hours(
 ) -> HttpResponse:
     """Display hours for a location. This view is used by the digital signage system."""
 
-    widget_url = settings.LIBCAL_HOURS_WIDGET
+    hours_widget_url = settings.LIBCAL_HOURS_WIDGET
 
     location_name = Location.objects.get(location_id=location_id).name
     stylesheet = f"css/{orientation}.css"
 
-    hours = get_hours(widget_url, location_id)
+    hours = get_hours(hours_widget_url, location_id)
     single_location_hours = get_single_location_hours(hours, location_id)
     formatted_hours = format_hours(single_location_hours)
     if not formatted_hours:
@@ -69,6 +72,32 @@ def display_hours(
         "location_name": location_name,
     }
     return render(request, "signs/display.html", context)
+
+
+def display_clicc_events(request: HttpRequest) -> HttpResponse:
+    """Display events for CLICC classroom locations.
+    This view is used by the digital signage system."""
+
+    events_widget_url = settings.LIBCAL_EVENTS_WIDGET
+    # location IDs for CLICC classrooms, with corresponding names used as CSS classes
+    locations = [
+        {"location_id": 3363, "css_class": "classA"},
+        {"location_id": 4357, "css_class": "classB"},
+        {"location_id": 4358, "css_class": "classC"},
+        {"location_id": 4799, "css_class": "inq3"},
+    ]
+    location_events = {}
+
+    for location in locations:
+        location_id = location["location_id"]
+        events = get_location_events(events_widget_url, location_id)
+        parsed_events = parse_events(events)
+        formatted_events = format_events(parsed_events)
+        location_events[location_id] = formatted_events
+        for event in formatted_events:
+            event["css_class"] = location["css_class"]
+    context = {"location_events": location_events}
+    return render(request, "signs/display_events.html", context)
 
 
 @login_required

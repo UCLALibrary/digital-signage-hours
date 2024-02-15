@@ -1,4 +1,5 @@
 from django.test import TestCase
+from django.http import HttpResponse
 from signs.models import Location
 from signs.views_utils import (
     construct_display_url,
@@ -6,8 +7,12 @@ from signs.views_utils import (
     get_single_location_hours,
     format_hours,
     format_date,
+    parse_events,
+    format_events,
+    get_css_grid_row,
 )
 import json
+import datetime
 
 
 class LocationTestCase(TestCase):
@@ -194,3 +199,68 @@ class GetSingleLocationHoursTestCase(TestCase):
         # this ID is not in the response, so should return an empty dict
         single_location_hours = get_single_location_hours(data, "11111111")
         self.assertEqual(single_location_hours, {})
+
+
+class ParseLocationEventsTestCase(TestCase):
+    def test_parse_events(self):
+        with open("signs/fixtures/libcal_events_response_3363.html") as f:
+            html_response = f.read()
+        data = HttpResponse(html_response)
+        parsed_events = parse_events(data)
+        self.assertEqual(len(parsed_events), 4)
+        # check that we got the expected event data
+        # use the second event, since the first has no title
+        self.assertEqual(parsed_events[1]["title"], "Philosophy 31")
+        self.assertEqual(
+            parsed_events[1]["times"], "9:30am - 11:30am Wednesday, February 14, 2024"
+        )
+
+    def test_parse_events_no_event(self):
+        with open("signs/fixtures/libcal_events_response_10430.html") as f:
+            html_response = f.read()
+        data = HttpResponse(html_response)
+        parsed_events = parse_events(data)
+        # no events for this location, so should return an empty list
+        self.assertEqual(parsed_events, [])
+
+
+class FormatEventsTestCase(TestCase):
+    def test_format_events(self):
+        with open("signs/fixtures/libcal_events_response_3363.html") as f:
+            html_response = f.read()
+        data = HttpResponse(html_response)
+        parsed_events = parse_events(data)
+        formatted_events = format_events(parsed_events)
+        # should have 3 events after formatting
+        self.assertEqual(len(formatted_events), 3)
+        # check expected values for first event
+        self.assertEqual(formatted_events[0]["title"], "Philosophy 31")
+        self.assertEqual(formatted_events[0]["start_time"], datetime.time(9, 30))
+        self.assertEqual(formatted_events[0]["end_time"], datetime.time(11, 30))
+
+    def test_format_events_no_event(self):
+        with open("signs/fixtures/libcal_events_response_10430.html") as f:
+            html_response = f.read()
+        data = HttpResponse(html_response)
+        parsed_events = parse_events(data)
+        formatted_events = format_events(parsed_events)
+        # no events for this location, so should return an empty list
+        self.assertEqual(formatted_events, [])
+
+
+class GetCSSGridRowTestCase(TestCase):
+    def test_get_css_grid_row(self):
+        nine_am = datetime.time(9, 0)
+        row = get_css_grid_row(nine_am)
+        self.assertEqual(row, "4")
+
+    def test_get_css_grid_row_half_hour(self):
+        nine_thirty_am = datetime.time(9, 30)
+        row = get_css_grid_row(nine_thirty_am)
+        self.assertEqual(row, "5")
+
+    def test_get_css_grid_rounded_down(self):
+        nine_fifteen_am = datetime.time(9, 15)
+        row = get_css_grid_row(nine_fifteen_am)
+        # should round down to 9:00am, row 4
+        self.assertEqual(row, "4")
