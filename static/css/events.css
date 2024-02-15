@@ -17,7 +17,7 @@ html {
   color: white;
   background-repeat: no-repeat;
   background-size: 1080px 1920px;
-  background-image: url("/static/portrait_background_small.png");
+  background-image: url("/static/img/portrait_background_small.png");
 }
 
 main {
