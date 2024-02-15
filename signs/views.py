@@ -80,17 +80,22 @@ def display_clicc_events(request: HttpRequest) -> HttpResponse:
 
     events_widget_url = settings.LIBCAL_EVENTS_WIDGET
     # location IDs for CLICC classrooms, with corresponding names used as CSS classes
-    locations = [(3363, "classA"), (4357, "classB"), (4358, "classC"), (4799, "inq3")]
+    locations = [
+        {"location_id": 3363, "css_class": "classA"},
+        {"location_id": 4357, "css_class": "classB"},
+        {"location_id": 4358, "css_class": "classC"},
+        {"location_id": 4799, "css_class": "inq3"},
+    ]
     location_events = {}
 
     for location in locations:
-        location_id = location[0]
+        location_id = location["location_id"]
         events = get_location_events(events_widget_url, location_id)
         parsed_events = parse_events(events)
         formatted_events = format_events(parsed_events)
         location_events[location_id] = formatted_events
         for event in formatted_events:
-            event["css_class"] = location[1]
+            event["css_class"] = location["css_class"]
     context = {"location_events": location_events}
     return render(request, "signs/display_events.html", context)
 
