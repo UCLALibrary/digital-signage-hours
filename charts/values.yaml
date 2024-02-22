@@ -40,6 +40,7 @@ django:
     csrf_trusted_origins: []
     log_level: ""
     libcal_hours_widget: ""
+    libcal_events_widget: ""
     db_backend: ""
     db_name: ""
     db_user: ""

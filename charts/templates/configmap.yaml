@@ -12,6 +12,7 @@ data:
   DJANGO_CSRF_TRUSTED_ORIGINS: {{ range .Values.django.env.csrf_trusted_origins }}{{ . | quote }}{{ end }}
   DJANGO_LOG_LEVEL: {{ .Values.django.env.log_level }}
   DJANGO_LIBCAL_HOURS_WIDGET: {{ .Values.django.env.libcal_hours_widget }}
+  DJANGO_LIBCAL_EVENTS_WIDGET: {{ .Values.django.env.libcal_events_widget }}
   DJANGO_DB_BACKEND: {{ .Values.django.env.db_backend }}
   DJANGO_DB_NAME: {{ .Values.django.env.db_name }}
   DJANGO_DB_USER: {{ .Values.django.env.db_user }}
