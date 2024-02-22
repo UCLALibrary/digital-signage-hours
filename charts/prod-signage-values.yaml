@@ -6,7 +6,7 @@ replicaCount: 1
 
 image:
   repository: uclalibrary/digital-signage-hours
-  tag: v1.0.1
+  tag: v1.0.2
   pullPolicy: Always
 
 nameOverride: ""
@@ -45,6 +45,7 @@ django:
       - https://signage.library.ucla.edu
     log_level: "INFO"
     libcal_hours_widget: "https://calendar.library.ucla.edu/widget/hours/grid?"
+    libcal_events_widget: "https://calendar.library.ucla.edu/api_events.php?m=today&simple=ul_date&cid="
     db_backend: "django.db.backends.postgresql_psycopg2"
     db_name: "signage"
     db_user: "signage"
