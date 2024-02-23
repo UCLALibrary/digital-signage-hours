@@ -2,6 +2,7 @@ import logging
 from django.shortcuts import render
 from django.http import HttpRequest, HttpResponse
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.clickjacking import xframe_options_exempt
 from django.conf import settings
 from signs.models import Location
 from signs.views_utils import (
@@ -40,6 +41,8 @@ def get_hours_url(request: HttpRequest) -> HttpResponse:
     )
 
 
+# This view is public, and needs to be allowed in a Rise Vision iframe.
+@xframe_options_exempt
 def display_hours(
     request: HttpRequest, location_id: int, orientation: str
 ) -> HttpResponse:
@@ -74,6 +77,8 @@ def display_hours(
     return render(request, "signs/display.html", context)
 
 
+# This view is public, and needs to be allowed in a Rise Vision iframe.
+@xframe_options_exempt
 def display_clicc_events(request: HttpRequest) -> HttpResponse:
     """Display events for CLICC classroom locations.
     This view is used by the digital signage system."""
