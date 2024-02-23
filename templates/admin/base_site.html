@@ -1,0 +1,14 @@
+{% extends "admin/base.html" %}
+
+{% load static %}
+{% block extrahead %}
+    <link rel="icon" type="image/x-icon" href="{% static 'favicon.ico' %}"/>
+{% endblock %}
+
+{% block title %}Digital Signage Admin{% endblock %}
+
+{% block branding %}
+<h1><a href="{% url 'admin:index' %}">Digital Signage Administration</a></h1>
+{% endblock %}
+
+{% block nav-global %}<a href="{{ site_url }}">Digital Signage Home</a>{% endblock %}
