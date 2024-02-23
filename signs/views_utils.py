@@ -123,10 +123,10 @@ def construct_display_url(
 
     # request.scheme can incorrectly return "http" when the site is running on HTTPS,
     # so we use the run_env variable to determine the correct scheme
-    if run_env == "prod":
-        scheme = "https"
-    else:
+    if run_env == "dev":
         scheme = "http"
+    else:
+        scheme = "https"
 
     return f"{scheme}://{host}/display_hours/{location_id}/{orientation}"
 
