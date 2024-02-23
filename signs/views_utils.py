@@ -115,12 +115,19 @@ def format_date(date: str) -> str:
 
 
 def construct_display_url(
-    request: HttpRequest, location_id: int, orientation: str
+    request: HttpRequest, location_id: int, orientation: str, run_env: str
 ) -> str:
     """Construct URL for display of hours given location ID and orientation."""
 
-    scheme = request.scheme
     host = request.get_host()
+
+    # request.scheme can incorrectly return "http" when the site is running on HTTPS,
+    # so we use the run_env variable to determine the correct scheme
+    if run_env == "prod":
+        scheme = "https"
+    else:
+        scheme = "http"
+
     return f"{scheme}://{host}/display_hours/{location_id}/{orientation}"
 
 

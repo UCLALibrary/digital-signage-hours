@@ -6,7 +6,7 @@ replicaCount: 1
 
 image:
   repository: uclalibrary/digital-signage-hours
-  tag: v1.0.2
+  tag: v1.0.3
   pullPolicy: Always
 
 nameOverride: ""

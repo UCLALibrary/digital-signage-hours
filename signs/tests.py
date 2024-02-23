@@ -28,12 +28,28 @@ class ConstructDisplayURLTestCase(TestCase):
     def setUp(self):
         Location.objects.create(name="Powell Library", location_id=1)
 
-    def test_construct_display_url(self):
+    def test_construct_display_url_prod(self):
         powell = Location.objects.get(location_id=1)
         response = self.client.get("get_hours_url/")
         request = response.wsgi_request
-        url = construct_display_url(request, powell.location_id, "portrait_small")
-        # dummy request will have host of "testserver" and scheme of "http"
+        run_env = "prod"
+        url = construct_display_url(
+            request, powell.location_id, "portrait_small", run_env
+        )
+        # dummy request will have host of "testserver",
+        # run_env = "prod" means scheme should be "https"
+        self.assertEqual(url, "https://testserver/display_hours/1/portrait_small")
+
+    def test_construct_display_url_dev(self):
+        powell = Location.objects.get(location_id=1)
+        response = self.client.get("get_hours_url/")
+        request = response.wsgi_request
+        run_env = "dev"
+        url = construct_display_url(
+            request, powell.location_id, "portrait_small", run_env
+        )
+        # dummy request will have host of "testserver",
+        # run_env != "prod" means scheme should be "http"
         self.assertEqual(url, "http://testserver/display_hours/1/portrait_small")
 
 

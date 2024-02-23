@@ -31,7 +31,9 @@ def get_hours_url(request: HttpRequest) -> HttpResponse:
         if location_form.is_valid():
             location_id = location_form.cleaned_data["location"].location_id
             orientation = location_form.cleaned_data["orientation"]
-            url = construct_display_url(request, location_id, orientation)
+            # run_env is used to determine the correct scheme for the URL (http or https)
+            run_env = settings.RUN_ENV
+            url = construct_display_url(request, location_id, orientation, run_env)
 
     context = {"location_form": location_form, "url": url}
     return render(
