@@ -30,7 +30,7 @@
                         <span class="day">{{ day.weekday }}</span>
                         <span class="time">{{ day.rendered_hours }}</span>
                     </li>
-                    {# no parentheses in Django tabs, so use nested ifs for clarity #}
+                    {# no parentheses in Django template tags, so use nested ifs for clarity #}
                     {% if forloop.counter == 4 %}
                         {% if stylesheet == "css/landscape_large.css" or stylesheet == "css/landscape_small.css"%}
             </ul>
