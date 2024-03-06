@@ -6,11 +6,12 @@
 
 html {
   font-family: "Karbon", Arial, Helvetica, sans-serif;
-  font-size: 35px;
+  font-size: 30px;
   color: #ffffff;
-  width: 3840px;
-  height: 2160px;
+  width: 1920px;
+  height: 1080px;
   background-repeat: no-repeat;
+  background-size: cover;
   background-image: url("/static/img/landscape_background.png");
 }
 
@@ -62,7 +63,7 @@ header {
 }
 
 .columns {
-  width: 45%;
+  width: 80%;
   display: flex;
   justify-content: space-between;
 }

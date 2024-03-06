@@ -3,7 +3,8 @@ from signs.models import Location
 
 
 ORIENTATION_CHOICES = [
-    ("landscape", "Landscape (3840x2160)"),
+    ("landscape_small", "Landscape (1920x1080)"),
+    ("landscape_large", "Landscape (3840x2160)"),
     ("portrait_small", "Portrait (1080x1920)"),
     ("portrait_large", "Portrait (2160x3840)"),
 ]
