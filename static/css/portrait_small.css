@@ -60,6 +60,7 @@ li {
 
 svg {
   height: 5rem;
+  transform: rotate(90deg);
 }
 
 header {
@@ -77,4 +78,11 @@ img {
   background-color: #2774ae;
   box-shadow: 0 0 10px 10px #8bb8e8;
   color: #ffd100;
+}
+
+.footer {
+  position: absolute;
+  bottom: -1180px;
+  left: 95px;
+  font-size: 1.4rem;
 }
