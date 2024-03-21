@@ -5,6 +5,7 @@
 }
 
 html {
+  position: relative;
   font-family: "Karbon", Arial, Helvetica, sans-serif;
   font-size: 60px;
   color: #ffffff;
@@ -78,4 +79,11 @@ hr {
   background-color: #2774ae;
   box-shadow: 0 0 5px 5px #8bb8e8;
   color: #ffd100;
+}
+
+.footer {
+  position: absolute;
+  bottom: 65px;
+  left: 100px;
+  font-size: 1.8rem;
 }
