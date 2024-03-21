@@ -197,3 +197,10 @@ hr {
 .eight-pm {
   grid-row-start: 26;
 }
+
+.footer {
+  position: absolute;
+  bottom: -1170px;
+  left: 100px;
+  font-size: 2rem;
+}
