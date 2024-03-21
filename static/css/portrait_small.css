@@ -5,6 +5,7 @@
 }
 
 html {
+  position: relative;
   font-family: "Karbon", Arial, Helvetica, sans-serif;
   font-size: 40px;
   color: #ffffff;
@@ -82,7 +83,7 @@ img {
 
 .footer {
   position: absolute;
-  bottom: -1180px;
+  bottom: 40px;
   left: 95px;
   font-size: 1.4rem;
 }
