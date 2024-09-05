@@ -1,5 +1,4 @@
 # Docker-compose file for testing via Github Actions
-version: "3.1"
 services:
   django:
     container_name: django-frontend
