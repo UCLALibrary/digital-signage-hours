@@ -23,7 +23,7 @@ if [ "$DJANGO_RUN_ENV" = "dev" ]; then
   # Load fixtures, only in dev environment.
   # TODO: Configure or delete
   echo "Loading sample data set..."
-  # python ./manage.py loaddata sample_data
+  python ./manage.py loaddata location
 fi
 
 # Build static files directory, starting fresh each time
