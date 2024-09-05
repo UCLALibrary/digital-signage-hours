@@ -11,7 +11,7 @@ jobs:
       # Docker-compose file for testing via Github Actions
       COMPOSE_FILE: docker-compose.ga.yml
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       
       - name: Build the stack
         run: docker-compose -f $COMPOSE_FILE up --build -d
