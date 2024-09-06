@@ -11,10 +11,10 @@ jobs:
       # Docker-compose file for testing via Github Actions
       COMPOSE_FILE: docker-compose.ga.yml
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       
       - name: Build the stack
-        run: docker-compose -f $COMPOSE_FILE up --build -d
+        run: docker compose -f $COMPOSE_FILE up --build -d
       
       - name: Wait for database
         run: sleep 15s
@@ -22,22 +22,22 @@ jobs:
 
         # Check logs separately, GA not showing all of both together
       - name: Logs (db)
-        run: docker-compose -f $COMPOSE_FILE logs --tail="all" db
+        run: docker compose -f $COMPOSE_FILE logs --tail="all" db
 
       - name: Logs (django)
-        run: docker-compose -f $COMPOSE_FILE logs --tail="all" django
+        run: docker compose -f $COMPOSE_FILE logs --tail="all" django
 
       - name: Containers
-        run: docker-compose -f $COMPOSE_FILE ps
+        run: docker compose -f $COMPOSE_FILE ps
 
       - name: Top processes
-        run: docker-compose -f $COMPOSE_FILE top
+        run: docker compose -f $COMPOSE_FILE top
 
       - name: Create models
-        run: docker-compose -f $COMPOSE_FILE exec -T django python manage.py migrate
+        run: docker compose -f $COMPOSE_FILE exec -T django python manage.py migrate
       
       #- name: Load data
-      #  run: docker-compose -f $COMPOSE_FILE exec -T django python manage.py loaddata sample_data.json
+      #  run: docker compose -f $COMPOSE_FILE exec -T django python manage.py loaddata sample_data.json
       
       - name: Check connectivity
         #run: docker run --network container:django-frontend appropriate/curl -s -I http://localhost:8000/admin/
@@ -45,4 +45,4 @@ jobs:
       
       - name: Run tests
         # -T to disable TTY allocation
-        run: docker-compose -f $COMPOSE_FILE exec -T django python manage.py test
+        run: docker compose -f $COMPOSE_FILE exec -T django python manage.py test
