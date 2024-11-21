@@ -228,7 +228,7 @@ class ParseLocationEventsTestCase(TestCase):
         # use the second event, since the first has no title
         self.assertEqual(parsed_events[1]["title"], "Philosophy 31")
         self.assertEqual(
-            parsed_events[1]["times"], "9:30am - 11:30am Wednesday, February 14, 2024"
+            parsed_events[1]["times"], "9:30am - 11:30am, Wednesday, February 14, 2024"
         )
 
     def test_parse_events_no_event(self):

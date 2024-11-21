@@ -159,10 +159,10 @@ def format_events(events: list[dict]) -> list[dict]:
     """Format events for display on the digital sign."""
     parsed_events = []
     for event in events:
-        # events are in the form of "8:00am - 12:00pm Friday, February 2, 2024"
-        # we only want the times
-        start, end = event["times"].split(" - ")
-        end = end.split(" ")[0]
+        # events are in the form of "8:00am - 12:00pm, Friday, February 2, 2024"
+        # we only want the times, trimmed of spaces if needed.
+        times = event["times"].split(",")[0]
+        start, end = (time.strip() for time in times.split(" - "))
 
         # we now have times in the form of "8:00am"
         # convert to datetime.time
