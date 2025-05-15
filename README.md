@@ -31,15 +31,15 @@ References are to files from the original application, all in the `legacy_code` 
 The development environment requires:
 * git (at least version 2)
 * docker (current version recommended: 20.10.12)
-* docker-compose (at least version 1.25.0; current recommended: 1.29.2)
+* docker compose (current recommended: 2.31.0)
 
 #### PostgreSQL container
 
-The development database is a Docker container running PostgreSQL 12, which matches our deployment environment.
+The development database is a Docker container running PostgreSQL 16, which matches our deployment environment.
 
 #### Django container
 
-This uses Django 4.2, in a Debian 11 (Bullseye) container running Python 3.11.  All code 
+This uses Django 5.2, in a Debian 12 (Bookworm) container running Python 3.13.  All code
 runs in the container, so local version of Python does not matter.
 
 The container runs via `docker_scripts/entrypoint.sh`, which
@@ -59,34 +59,34 @@ The container runs via `docker_scripts/entrypoint.sh`, which
 
    ```$ cd digital-signage-hours```
 
-3. Build using docker-compose.
+3. Build using docker compose.
 
-   ```$ docker-compose build```
+   ```$ docker compose build```
 
 4. Bring the system up, with containers running in the background.
 
-   ```$ docker-compose up -d```
+   ```$ docker compose up -d```
 
 5. Logs can be viewed, if needed (`-f` to tail logs).
 
    ```
-   $ docker-compose logs -f db
-   $ docker-compose logs -f django
+   $ docker compose logs -f db
+   $ docker compose logs -f django
    ```
 
 6. Run commands in the containers, if needed.
 
    ```
    # Open psql client in the dev database container
-   $ docker-compose exec db psql -d digital_signs -U digital_signs
+   $ docker compose exec db psql -d digital_signs -U digital_signs
    # Open a shell in the django container
-   $ docker-compose exec django bash
+   $ docker compose exec django bash
    # Django-aware Python shell
-   $ docker-compose exec django python manage.py shell
+   $ docker compose exec django python manage.py shell
    # Apply new migrations without a restart
-   $ docker-compose exec django python manage.py migrate
+   $ docker compose exec django python manage.py migrate
    # Populate database with sample data (once it exists...)
-   $ docker-compose exec django python manage.py loaddata --app signs sample_data
+   $ docker compose exec django python manage.py loaddata --app signs sample_data
    ```
 7. Connect to the running application via browser
 
@@ -94,11 +94,11 @@ The container runs via `docker_scripts/entrypoint.sh`, which
 
 8. Edit code locally.  All changes are immediately available in the running container, but if a restart is needed:
 
-   ```$ docker-compose restart django```
+   ```$ docker compose restart django```
 
 9. Shut down the system when done.
 
-   ```$ docker-compose down```
+   ```$ docker compose down```
 
 ### Logging
 
@@ -149,7 +149,7 @@ In deployed container:
 Tests focus on code which has significant side effects or implements custom logic.  
 Run tests in the container:
 
-```$ docker-compose exec django python manage.py test```
+```$ docker compose exec django python manage.py test```
 
 #### Preparing a release
 
