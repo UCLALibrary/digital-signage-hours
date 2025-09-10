@@ -165,7 +165,7 @@ def display_devices(request: HttpRequest, orientation: str) -> HttpResponse:
         response = requests.get(devices_api_url, timeout=10)
         response.raise_for_status()
         device_data = response.json()
-        logger.debug(f"Received {len(device_data)} devices from API")
+        logger.debug(f"Received devices for {len(device_data)} locations from API")
     except requests.RequestException as e:
         logger.error(f"Error fetching devices: {e}")
         device_data = []

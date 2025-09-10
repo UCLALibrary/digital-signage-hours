@@ -23,6 +23,3 @@ class LocationForm(forms.ModelForm):
 # OrientationForm used in get_devices_url view
 class OrientationForm(forms.Form):
     orientation = forms.ChoiceField(choices=ORIENTATION_CHOICES)
-
-    class Meta:
-        fields = ["orientation"]
