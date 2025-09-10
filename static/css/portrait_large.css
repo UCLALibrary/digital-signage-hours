@@ -92,10 +92,11 @@ img {
 
 .table-container {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   width: 100%;
-  height: 2500px; /* or use a value that fits your layout, e.g. 100vh or 60vh */
+  height: 2300px;
 }
 
 table {
@@ -105,7 +106,7 @@ table {
   box-shadow: 0 0 10px 2px #8bb8e8;
   border-radius: 12px;
   overflow: hidden;
-  width: 80%;
+  width: 1500px;
 }
 
 th, td {

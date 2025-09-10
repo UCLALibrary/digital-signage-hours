@@ -92,6 +92,7 @@ img {
 
 .table-container {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   width: 100%;
@@ -104,17 +105,19 @@ table {
   box-shadow: 0 0 10px 2px #8bb8e8;
   border-radius: 12px;
   overflow: hidden;
+  width: 750px;
+  margin: 1rem auto;
 }
 
 th, td {
-  padding: 1rem 2rem;
+  padding: .5rem;
   text-align: center;
   border-bottom: 1px solid #8bb8e8;
 }
 
 th {
   font-weight: 600;
-  font-size: 1.5rem;
+  font-size: 1.2rem;
 }
 
 tr:last-child td {

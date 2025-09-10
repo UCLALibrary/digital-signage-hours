@@ -20,31 +20,55 @@
             </div>
         </header>
         <div class="table-container">
-            <table>
-                <thead>
-                    <tr>
-                        <th></th>
-                        {% for location in device_data.keys %}
-                            <th>{{ location }}</th>
-                        {% endfor %}
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for location, value in device_data.items %}
-                        {% if forloop.first %}
-                            {% for device in value.keys %}
+            {% if stylesheet == "css/portrait_large.css" or stylesheet == "css/portrait_small.css" %}
+            {# Portrait orientation: one table per location #}
+                {% for location, devices in device_data.items %}
+                    <div>
+                        <table>
+                            <thead>
                                 <tr>
-                                    <td>{{ device }}</td>
-                                    {% for loc, val in device_data.items %}
-                                        <td>{{ val|get_item:device|default:"0" }}</td>
-                                    {% endfor %}
+                                    <th></th>
+                                    <th>{{ location }}</th>
                                 </tr>
+                            </thead>
+                            <tbody>
+                                {% for device, count in devices.items %}
+                                    <tr>
+                                        <td>{{ device }}</td>
+                                        <td>{{ count }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% endfor %}
+            {% else %}
+            {# Landscape orientation: single table with locations as columns #}
+                <table>
+                    <thead>
+                        <tr>
+                            <th></th>
+                            {% for location in device_data.keys %}
+                                <th>{{ location }}</th>
                             {% endfor %}
-                        {% endif %}
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for location, value in device_data.items %}
+                            {% if forloop.first %}
+                                {% for device in value.keys %}
+                                    <tr>
+                                        <td>{{ device }}</td>
+                                        {% for loc, val in device_data.items %}
+                                            <td>{{ val|get_item:device|default:"0" }}</td>
+                                        {% endfor %}
+                                    </tr>
+                                {% endfor %}
+                            {% endif %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}
         </div>
     </main>
     <div class="footer">
