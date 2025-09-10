@@ -131,6 +131,21 @@ def construct_display_url(
     return f"{scheme}://{host}/display_hours/{location_id}/{orientation}"
 
 
+def construct_devices_url(request: HttpRequest, orientation: str, run_env: str) -> str:
+    """Construct URL for display of devices given orientation."""
+
+    host = request.get_host()
+
+    # request.scheme can incorrectly return "http" when the site is running on HTTPS,
+    # so we use the run_env variable to determine the correct scheme
+    if run_env == "dev":
+        scheme = "http"
+    else:
+        scheme = "https"
+
+    return f"{scheme}://{host}/display_devices/{orientation}"
+
+
 def get_location_events(widget_url: str, location_id: int) -> HttpResponse:
     """Get events for a location from the LibCal widget."""
 

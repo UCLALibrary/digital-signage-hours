@@ -1,4 +1,5 @@
 import logging
+import requests
 from django.shortcuts import render
 from django.http import HttpRequest, HttpResponse
 from django.contrib.auth.decorators import login_required
@@ -11,11 +12,12 @@ from signs.views_utils import (
     get_single_location_hours,
     get_start_end_dates,
     construct_display_url,
+    construct_devices_url,
     get_location_events,
     parse_events,
     format_events,
 )
-from signs.forms import LocationForm
+from signs.forms import LocationForm, OrientationForm
 
 logger = logging.getLogger(__name__)
 
@@ -127,3 +129,49 @@ def show_log(request: HttpRequest, line_count: int = 200) -> HttpResponse:
 def release_notes(request: HttpRequest) -> HttpResponse:
     """Display release notes."""
     return render(request, "signs/release_notes.html")
+
+
+@login_required
+def get_devices_url(request: HttpRequest) -> HttpResponse:
+    """Construct URL for display of devices."""
+    orientation_form = OrientationForm()
+    url = None
+
+    if request.method == "POST":
+        orientation_form = OrientationForm(request.POST)
+        if orientation_form.is_valid():
+            orientation = orientation_form.cleaned_data["orientation"]
+            # run_env is used to determine the correct scheme for the URL (http or https)
+            run_env = settings.RUN_ENV
+            url = construct_devices_url(request, orientation, run_env)
+
+    context = {"orientation_form": orientation_form, "url": url}
+    return render(
+        request,
+        "signs/get_devices_url.html",
+        context,
+    )
+
+
+# This view is public, and needs to be allowed in a Rise Vision iframe.
+@xframe_options_exempt
+def display_devices(request: HttpRequest, orientation: str) -> HttpResponse:
+    """Display devices for a location. This view is used by the digital signage system."""
+    devices_api_url = settings.CLICC_DEVICES_API_URL
+    stylesheet = f"css/{orientation}.css"
+
+    logger.debug(f"Fetching devices from {devices_api_url}")
+    try:
+        response = requests.get(devices_api_url, timeout=10)
+        response.raise_for_status()
+        device_data = response.json()
+        logger.debug(f"Received {len(device_data)} devices from API")
+    except requests.RequestException as e:
+        logger.error(f"Error fetching devices: {e}")
+        device_data = []
+
+    context = {
+        "device_data": device_data,
+        "stylesheet": stylesheet,
+    }
+    return render(request, "signs/display_devices.html", context)
