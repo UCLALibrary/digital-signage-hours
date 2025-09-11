@@ -1,13 +1,13 @@
 import requests
 import logging
-from datetime import datetime
+from datetime import datetime, time
 from bs4 import BeautifulSoup
 from django.http import HttpRequest, HttpResponse
 
 logger = logging.getLogger(__name__)
 
 
-def get_hours(widget_url: str, location_id: str) -> dict:
+def get_hours(widget_url: str, location_id: int) -> dict:
     """Retrieve hours for a location from the LibCal widget.
     Results for parent locations will include hours for all child locations."""
     # We request 2 weeks of hours from the widget to cover Monday-Sunday
@@ -19,7 +19,7 @@ def get_hours(widget_url: str, location_id: str) -> dict:
     return data
 
 
-def get_single_location_hours(data: dict, location_id: str) -> dict:
+def get_single_location_hours(data: dict, location_id: int) -> dict:
     """Given a LibCal hours response, return hours for a single location."""
 
     # We might have extra locations in the response, so check for the one we want
@@ -110,8 +110,8 @@ def get_start_end_dates(hours: list[dict]) -> tuple[str, str]:
 def format_date(date: str) -> str:
     """Format date for display on digital sign. Converts 2024-02-04 to Feb 04."""
 
-    date = datetime.strptime(date, "%Y-%m-%d")
-    return date.strftime("%b %d")
+    output_date = datetime.strptime(date, "%Y-%m-%d")
+    return output_date.strftime("%b %d")
 
 
 def construct_display_url(
@@ -146,7 +146,7 @@ def construct_devices_url(request: HttpRequest, orientation: str, run_env: str) 
     return f"{scheme}://{host}/display_devices/{orientation}"
 
 
-def get_location_events(widget_url: str, location_id: int) -> HttpResponse:
+def get_location_events(widget_url: str, location_id: int) -> requests.Response:
     """Get events for a location from the LibCal widget."""
 
     widget_url += f"{location_id}"
@@ -154,7 +154,7 @@ def get_location_events(widget_url: str, location_id: int) -> HttpResponse:
     return response
 
 
-def parse_events(response: HttpResponse) -> list[dict]:
+def parse_events(response: requests.Response) -> list[dict]:
     """Parse the HTML response from the LibCal widget using BeautifulSoup.
     Return a list of events, each as a dictionary with title and times."""
     if b"No events are scheduled." in response.content:
@@ -203,7 +203,7 @@ def format_events(events: list[dict]) -> list[dict]:
     return parsed_events
 
 
-def get_css_grid_row(time: datetime) -> str:
+def get_css_grid_row(time: time) -> str:
     """Given a time, return the grid row that corresponds to the time."""
     # time is a datetime object with only the time set
     # return the grid row that corresponds to the time

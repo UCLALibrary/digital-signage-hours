@@ -37,10 +37,10 @@ def get_hours_url(request: HttpRequest) -> HttpResponse:
             run_env = settings.RUN_ENV
             url = construct_display_url(request, location_id, orientation, run_env)
 
-    context = {"location_form": location_form, "url": url}
+    context = {"form": location_form, "url": url}
     return render(
         request,
-        "signs/get_hours_url.html",
+        "signs/get_url.html",
         context,
     )
 
@@ -145,10 +145,10 @@ def get_devices_url(request: HttpRequest) -> HttpResponse:
             run_env = settings.RUN_ENV
             url = construct_devices_url(request, orientation, run_env)
 
-    context = {"orientation_form": orientation_form, "url": url}
+    context = {"form": orientation_form, "url": url}
     return render(
         request,
-        "signs/get_devices_url.html",
+        "signs/get_url.html",
         context,
     )
 
