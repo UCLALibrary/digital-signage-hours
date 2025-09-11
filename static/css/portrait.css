@@ -99,3 +99,14 @@ th {
 tr:last-child td {
   border-bottom: none;
 }
+
+td.count, th.count {
+  text-align: right;
+  width: 3rem;
+}
+
+td.device {
+  text-align: left;
+  padding-left: 1rem;
+  width: 12rem;
+}

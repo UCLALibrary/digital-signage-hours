@@ -25,7 +25,7 @@ logger = logging.getLogger(__name__)
 @login_required
 def get_hours_url(request: HttpRequest) -> HttpResponse:
     """Construct URL for display of hours.
-    
+
     :param request: The HTTP request object.
     :return: The HTTP response object with the rendered template.
     """
@@ -55,7 +55,7 @@ def display_hours(
     request: HttpRequest, location_id: int, orientation: str
 ) -> HttpResponse:
     """Display hours for a location. This view is used by the digital signage system.
-    
+
     :param request: The HTTP request object.
     :param location_id: The ID of the location to display hours for.
     :param orientation: The orientation of the display, small or large portrait or landscape.
@@ -96,7 +96,7 @@ def display_hours(
 def display_clicc_events(request: HttpRequest) -> HttpResponse:
     """Display events for CLICC classroom locations.
     This view is used by the digital signage system.
-    
+
     :param request: The HTTP request object.
     :return: The HTTP response object with the rendered template.
     """
@@ -126,7 +126,7 @@ def display_clicc_events(request: HttpRequest) -> HttpResponse:
 @login_required
 def show_log(request: HttpRequest, line_count: int = 200) -> HttpResponse:
     """Display log.
-    
+
     :param request: The HTTP request object.
     :param line_count: The number of lines from the end of the log file to display.
     :return: The HTTP response object with the rendered template.
@@ -147,7 +147,7 @@ def show_log(request: HttpRequest, line_count: int = 200) -> HttpResponse:
 @login_required
 def release_notes(request: HttpRequest) -> HttpResponse:
     """Display release notes.
-    
+
     :param request: The HTTP request object.
     :return: The HTTP response object with the rendered template.
     """
@@ -157,7 +157,7 @@ def release_notes(request: HttpRequest) -> HttpResponse:
 @login_required
 def get_devices_url(request: HttpRequest) -> HttpResponse:
     """Construct URL for display of devices.
-    
+
     :param request: The HTTP request object.
     :return: The HTTP response object with the rendered template.
     """
@@ -184,7 +184,7 @@ def get_devices_url(request: HttpRequest) -> HttpResponse:
 @xframe_options_exempt
 def display_devices(request: HttpRequest, orientation: str) -> HttpResponse:
     """Display devices for a location. This view is used by the digital signage system.
-    
+
     :param request: The HTTP request object.
     :param orientation: The orientation of the display, small or large portrait or landscape.
     :return: The HTTP response object with the rendered template.

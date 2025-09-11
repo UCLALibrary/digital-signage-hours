@@ -28,14 +28,14 @@
                             <thead>
                                 <tr>
                                     <th></th>
-                                    <th>{{ location }}</th>
+                                    <th class="count">{{ location }}</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {% for device, count in devices.items %}
                                     <tr>
-                                        <td>{{ device }}</td>
-                                        <td>{{ count }}</td>
+                                        <td class="device">{{ device }}</td>
+                                        <td class="count">{{ count }}</td>
                                     </tr>
                                 {% endfor %}
                             </tbody>

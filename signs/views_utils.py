@@ -2,7 +2,7 @@ import requests
 import logging
 from datetime import datetime, time
 from bs4 import BeautifulSoup
-from django.http import HttpRequest, HttpResponse
+from django.http import HttpRequest
 
 logger = logging.getLogger(__name__)
 
@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 def get_hours(widget_url: str, location_id: int) -> dict:
     """Retrieve hours for a location from the LibCal widget.
     Results for parent locations will include hours for all child locations.
-    
+
     :param widget_url: The base URL of the LibCal hours widget.
     :param location_id: The ID of the location to retrieve hours for.
     :return: A dictionary containing the hours data for the location.
@@ -27,7 +27,7 @@ def get_hours(widget_url: str, location_id: int) -> dict:
 
 def get_single_location_hours(data: dict, location_id: int) -> dict:
     """Given a LibCal hours response, return hours for a single location.
-    
+
     :param data: The full LibCal hours response as a dictionary.
     :param location_id: The ID of the location to retrieve hours for.
     :return: A dictionary containing the hours data for the specified location.
@@ -49,7 +49,7 @@ def get_single_location_hours(data: dict, location_id: int) -> dict:
 
 def format_hours(data: dict) -> list[dict]:
     """Reformat and remove unnecessary data from LibCal hours response.
-    
+
     :param data: The LibCal hours response for a single location.
     :return: A list of dictionaries, each containing date, weekday, and rendered_hours.
     """
@@ -114,7 +114,7 @@ def format_hours(data: dict) -> list[dict]:
 def get_start_end_dates(hours: list[dict]) -> tuple[str, str]:
     """Given a formatted list of hours, return start and end dates in short
     month-day format, e.g. ("Feb 05","Feb 11").
-    
+
     :param hours: A list of dictionaries, each containing date, weekday, and rendered_hours.
     :return: A tuple containing the start and end dates as strings.
     """
@@ -128,7 +128,7 @@ def get_start_end_dates(hours: list[dict]) -> tuple[str, str]:
 
 def format_date(date: str) -> str:
     """Format date for display on digital sign. Converts 2024-02-04 to Feb 04.
-    
+
     :param date: The date string in YYYY-MM-DD format.
     :return: The date string in "Mon DD" format.
     """
@@ -141,7 +141,7 @@ def construct_display_url(
     request: HttpRequest, location_id: int, orientation: str, run_env: str
 ) -> str:
     """Construct URL for display of hours given location ID and orientation.
-    
+
     :param request: The current HttpRequest object.
     :param location_id: The ID of the location to display hours for.
     :param orientation: The orientation of the display, small or large portrait or landscape.
@@ -157,7 +157,7 @@ def construct_display_url(
 
 def construct_devices_url(request: HttpRequest, orientation: str, run_env: str) -> str:
     """Construct URL for display of devices given orientation.
-    
+
     :param request: The current HttpRequest object.
     :param orientation: The orientation of the display, small or large portrait or landscape.
     :param run_env: The current run environment, e.g. "dev" or "prod".
@@ -169,10 +169,11 @@ def construct_devices_url(request: HttpRequest, orientation: str, run_env: str) 
 
     return f"{scheme}://{host}/display_devices/{orientation}"
 
+
 def get_correct_scheme(run_env: str) -> str:
-    """Return the correct scheme (http or https) based on the run environment, 
+    """Return the correct scheme (http or https) based on the run environment,
     as request.scheme can be unreliable. Used in constructing URLs for display views.
-     
+
     :param run_env: The current run environment, e.g. "dev" or "prod".
     :return: "http" if run_env is "dev", otherwise "https"."""
 
@@ -184,7 +185,7 @@ def get_correct_scheme(run_env: str) -> str:
 
 def get_location_events(widget_url: str, location_id: int) -> requests.Response:
     """Get events for a location from the LibCal widget.
-    
+
     :param widget_url: The base URL of the LibCal events widget.
     :param location_id: The ID of the location to retrieve events for.
     :return: The HTTP response from the LibCal widget.
@@ -198,7 +199,7 @@ def get_location_events(widget_url: str, location_id: int) -> requests.Response:
 def parse_events(response: requests.Response) -> list[dict]:
     """Parse the HTML response from the LibCal widget using BeautifulSoup.
     Return a list of events, each as a dictionary with title and times.
-    
+
     :param response: The HTTP response from the LibCal events widget.
     :return: A list of dictionaries, each containing title and times of an event.
     """
@@ -218,7 +219,7 @@ def parse_events(response: requests.Response) -> list[dict]:
 
 def format_events(events: list[dict]) -> list[dict]:
     """Format events for display on the digital sign.
-    
+
     :param events: A list of dictionaries, each containing title and times of an event.
     :return: A list of dictionaries, each containing title, start_time, end_time,
              start_css_row, and end_css_row of an event.
@@ -257,7 +258,7 @@ def format_events(events: list[dict]) -> list[dict]:
 
 def get_css_grid_row(time: time) -> str:
     """Given a time, return the grid row that corresponds to the time.
-    
+
     :param time: A datetime.time object representing the time.
     :return: The grid row as a string.
     """
