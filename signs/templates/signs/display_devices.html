@@ -1,0 +1,78 @@
+{% load static %}
+{% load custom_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{% static stylesheet %}">
+    <title>Available Devices</title>
+</head>
+<body>
+    <main>
+        <header>
+            <svg viewBox="0 0 81 80" fill="none" xmlns="https://www.w3.org/2000/svg">
+                <path d="M8.934 79.601 24.819 41.251M24.817 79.601 40.702 41.251M40.702 79.601 56.587 41.251M56.585 79.601 72.471 41.251" stroke="#0AA5FF" stroke-width="1.5"></path>
+                <path d="M24.819 39.35 8.934 1M40.702 39.35 24.817 1M56.587 39.35 40.702 1M72.471 39.35 56.585 1" stroke="#00E0E0" stroke-width="1.5" class="svg__stroke--wayfinder"></path>
+              </svg>
+            <div>
+                <h1>Available Devices</h1>
+            </div>
+        </header>
+        <div class="table-container">
+            {% if stylesheet == "css/portrait_large.css" or stylesheet == "css/portrait_small.css" %}
+            {# Portrait orientation: one table per location #}
+                {% for location, devices in device_data.items %}
+                    <div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th class="count">{{ location }}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for device, count in devices.items %}
+                                    <tr>
+                                        <td class="device">{{ device }}</td>
+                                        <td class="count">{{ count }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% endfor %}
+            {% else %}
+            {# Landscape orientation: single table with locations as columns #}
+                <table>
+                    <thead>
+                        <tr>
+                            <th></th>
+                            {% for location in device_data.keys %}
+                                <th>{{ location }}</th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for location, value in device_data.items %}
+                            {% if forloop.first %}
+                                {% for device in value.keys %}
+                                    <tr>
+                                        <td>{{ device }}</td>
+                                        {% for loc, val in device_data.items %}
+                                            <td>{{ val|get_item:device|default:"0" }}</td>
+                                        {% endfor %}
+                                    </tr>
+                                {% endfor %}
+                            {% endif %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}
+        </div>
+    </main>
+    <div class="footer">
+        library.ucla.edu
+    </div>
+</body>
+</html>

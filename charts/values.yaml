@@ -41,6 +41,7 @@ django:
     log_level: ""
     libcal_hours_widget: ""
     libcal_events_widget: ""
+    clicc_devices_api_url: ""
     db_backend: ""
     db_name: ""
     db_user: ""
