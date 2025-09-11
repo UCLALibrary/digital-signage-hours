@@ -46,6 +46,7 @@ django:
     log_level: "INFO"
     libcal_hours_widget: "https://calendar.library.ucla.edu/widget/hours/grid?"
     libcal_events_widget: "https://calendar.library.ucla.edu/api_events.php?m=today&simple=ul_date&cid="
+    clicc_devices_api_url: "https://clicc-devices.library.ucla.edu/devices/"
     db_backend: "django.db.backends.postgresql"
     db_name: "signage"
     db_user: "signage"
