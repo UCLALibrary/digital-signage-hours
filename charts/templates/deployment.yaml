@@ -15,10 +15,6 @@ spec:
       labels:
         {{- include "signage.selectorLabels" . | nindent 8 }}
     spec:
-      hostAliases:
-        - ip: "172.16.34.40"
-          hostnames:
-          - "clicc-devices.library.ucla.edu"
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
